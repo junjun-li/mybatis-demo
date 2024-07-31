@@ -1,5 +1,6 @@
 package com.imooc.mybatis;
 
+import com.imooc.mybatis.utils.MyBatisUtils;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -39,5 +40,21 @@ public class MyBatisTest {
             }
         }
 
+    }
+
+
+    @Test // 用工具类创建和销毁的实例
+    public void MyBatisUtilsTest() throws Exception {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            System.out.println(sqlSession);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (sqlSession != null) {
+                MyBatisUtils.closeSession(sqlSession);
+            }
+        }
     }
 }
