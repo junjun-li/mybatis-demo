@@ -32,9 +32,4 @@
         <!--    </dataSource>-->
         <!--</environment>-->
     </environments>
-
-    <mappers>
-        <mapper resource="mappers/goods.xml" />
-        <mapper resource="mappers/goods_detail.xml" />
-    </mappers>
 </configuration>
