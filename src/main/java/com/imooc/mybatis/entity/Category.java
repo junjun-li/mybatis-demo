@@ -53,4 +53,10 @@ public class Category {
         this.categoryOrder = categoryOrder;
     }
 
+    @Override
+    public String toString() {
+        return "Category{" +
+            "categoryName='" + categoryName + '\'' +
+            '}';
+    }
 }

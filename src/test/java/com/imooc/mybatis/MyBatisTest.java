@@ -1,5 +1,6 @@
 package com.imooc.mybatis;
 
+import com.imooc.mybatis.dto.GoodsDTO;
 import com.imooc.mybatis.entity.Goods;
 import com.imooc.mybatis.utils.MyBatisUtils;
 import org.apache.ibatis.io.Resources;
@@ -11,6 +12,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 // 使用了mybatis，则尽量避免导入 java.sql 包
@@ -108,6 +110,43 @@ public class MyBatisTest {
             List<Goods> goods = sqlSession.selectList("goods.selectPriceRange", params);
             for (Goods good : goods) {
                 System.out.println(good.getGoodsId() + " " + good.getTitle() + ": " + good.getCurrentPrice());
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (sqlSession != null) {
+                MyBatisUtils.closeSession(sqlSession);
+            }
+        }
+    }
+
+    @Test
+    public void selectGoodsLinkedHashMapTest() throws Exception {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            List<Map> list = sqlSession.selectList("goods.selectGoodsLinkedHashMap");
+            for (Map item : list) {
+                System.out.println(item);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (sqlSession != null) {
+                MyBatisUtils.closeSession(sqlSession);
+            }
+        }
+    }
+
+    @Test
+    public void selectGoodsDTOTest() throws Exception {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            List<GoodsDTO> list = sqlSession.selectList("goods.selectGoodsDTO");
+            for (GoodsDTO item : list) {
+                System.out.println(item);
+                // System.out.println(item.getGoods());
             }
         } catch (Exception e) {
             throw e;

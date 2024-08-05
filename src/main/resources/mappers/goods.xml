@@ -26,4 +26,39 @@
         order by current_price, goods_id
         limit 0, #{pageSize}
     </select>
+
+    <!--
+        利用LinkedHashMap保存多表关联结果
+        MyBatis会将每一条记录包装为LinkedHashMap对象
+        key是字段名,value是字段对应的值,字段类型根据表结构进行自动判断
+        优点: 易于扩展,易于使用
+        缺点: 太过灵活,无法进行编译时检查
+    -->
+    <select id="selectGoodsLinkedHashMap" resultType="java.util.LinkedHashMap">
+        select goods.*, category.category_name
+        from t_goods goods,
+             t_category category
+        where goods.category_id = category.category_id
+        limit 0, 5;
+    </select>
+
+
+    <resultMap id="rmGoods" type="com.imooc.mybatis.dto.GoodsDTO">
+        <id column="goods_id" property="goods.goodsId" />
+
+        <result column="title" property="goods.title" />
+        <result column="current_price" property="goods.currentPrice" />
+        <result column="category_id" property="goods.categoryId" />
+
+        <!--column可以重复,因为他们属于两个不一样的对象-->
+        <result column="category_id" property="category.categoryId" />
+        <result column="category_name" property="category.categoryName"/>
+    </resultMap>
+    <select id="selectGoodsDTO" resultMap="rmGoods">
+        select goods.*, category.*, '1' as test
+        from t_goods goods,
+             t_category category
+        where goods.category_id = category.category_id
+        limit 0, 10;
+    </select>
 </mapper>
