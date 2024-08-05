@@ -1,5 +1,6 @@
 package com.imooc.mybatis;
 
+import com.imooc.mybatis.entity.Goods;
 import com.imooc.mybatis.utils.MyBatisUtils;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -9,6 +10,9 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 // 使用了mybatis，则尽量避免导入 java.sql 包
 // import java.sql.Connection;
 
@@ -49,6 +53,62 @@ public class MyBatisTest {
         try {
             sqlSession = MyBatisUtils.openSession();
             System.out.println(sqlSession);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (sqlSession != null) {
+                MyBatisUtils.closeSession(sqlSession);
+            }
+        }
+    }
+
+    @Test
+    public void selectAllTest() throws Exception {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            List<Goods> goodsList = sqlSession.selectList("goods.selectAll");
+            for (Goods goods : goodsList) {
+                System.out.println(goods.getTitle());
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (sqlSession != null) {
+                MyBatisUtils.closeSession(sqlSession);
+            }
+        }
+    }
+
+    @Test
+    public void selectByIdTest() throws Exception {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            Goods goods = sqlSession.selectOne("goods.selectById", 1240);
+            System.out.println(goods.getTitle());
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (sqlSession != null) {
+                MyBatisUtils.closeSession(sqlSession);
+            }
+        }
+    }
+
+    @Test
+    public void selectPriceRangeTest() throws Exception {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            Map params = new HashMap<>();
+            params.put("min", 50);
+            params.put("max", 100);
+            params.put("pageSize", 10);
+            List<Goods> goods = sqlSession.selectList("goods.selectPriceRange", params);
+            for (Goods good : goods) {
+                System.out.println(good.getGoodsId() + " " + good.getTitle() + ": " + good.getCurrentPrice());
+            }
         } catch (Exception e) {
             throw e;
         } finally {
