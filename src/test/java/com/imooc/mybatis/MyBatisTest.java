@@ -187,7 +187,7 @@ public class MyBatisTest {
     }
 
     @Test
-    public void updateTest() {
+    public void updateTest() throws Exception {
         SqlSession sqlSession = null;
         try {
             sqlSession = MyBatisUtils.openSession();
@@ -195,6 +195,27 @@ public class MyBatisTest {
             goods.setTitle("测试商品-0806修改");
             int num = sqlSession.update("goods.update", goods);
             System.out.println("num: " + num);
+            //
+            sqlSession.commit();
+        } catch (Exception e) {
+            if (sqlSession != null) {
+                sqlSession.rollback();
+            }
+            throw e;
+        } finally {
+            if (sqlSession != null) {
+                MyBatisUtils.closeSession(sqlSession);
+            }
+        }
+    }
+
+    @Test
+    public void deleteTest() throws Exception {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            int delete = sqlSession.delete("goods.delete", 2684);
+            System.out.println("delete: " + delete);
             sqlSession.commit();
         } catch (Exception e) {
             if (sqlSession != null) {
