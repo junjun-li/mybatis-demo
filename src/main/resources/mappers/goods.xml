@@ -52,7 +52,7 @@
 
         <!--column可以重复,因为他们属于两个不一样的对象-->
         <result column="category_id" property="category.categoryId" />
-        <result column="category_name" property="category.categoryName"/>
+        <result column="category_name" property="category.categoryName" />
     </resultMap>
     <select id="selectGoodsDTO" resultMap="rmGoods">
         select goods.*, category.*, '1' as test
@@ -61,4 +61,15 @@
         where goods.category_id = category.category_id
         limit 0, 10;
     </select>
+
+    <!--insert-->
+    <insert id="insert" parameterType="com.imooc.mybatis.entity.Goods">
+        insert into t_goods(title, sub_title, original_cost, current_price,
+        discount, is_free_delivery, category_id)
+        values (#{title}, #{subTitle}, #{originalCost}, #{currentPrice},
+        #{discount}, #{isFreeDelivery}, #{categoryId});
+        <selectKey resultType="integer" keyProperty="goodsId" order="AFTER">
+            select last_insert_id();
+        </selectKey>
+    </insert>
 </mapper>

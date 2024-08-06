@@ -156,4 +156,33 @@ public class MyBatisTest {
             }
         }
     }
+
+    @Test
+    public void insertTest() throws Exception {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            Goods goods = new Goods();
+            goods.setTitle("测试商品0805");
+            goods.setSubTitle("SubTitle");
+            goods.setOriginalCost(200f);
+            goods.setCurrentPrice(100f);
+            goods.setDiscount(0.5f);
+            goods.setIsFreeDelivery(1);
+            goods.setCategoryId(43);
+            Integer num = sqlSession.insert("goods.insert", goods);
+            System.out.println(num);
+            sqlSession.commit();
+            System.out.println(goods.getGoodsId());
+        } catch (Exception e) {
+            if (sqlSession != null) {
+                sqlSession.rollback();
+            }
+            throw e;
+        } finally {
+            if (sqlSession != null) {
+                MyBatisUtils.closeSession(sqlSession);
+            }
+        }
+    }
 }
