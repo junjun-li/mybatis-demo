@@ -185,4 +185,26 @@ public class MyBatisTest {
             }
         }
     }
+
+    @Test
+    public void updateTest() {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            Goods goods = sqlSession.selectOne("goods.selectById", 2684);
+            goods.setTitle("测试商品-0806修改");
+            int num = sqlSession.update("goods.update", goods);
+            System.out.println("num: " + num);
+            sqlSession.commit();
+        } catch (Exception e) {
+            if (sqlSession != null) {
+                sqlSession.rollback();
+            }
+            throw e;
+        } finally {
+            if (sqlSession != null) {
+                MyBatisUtils.closeSession(sqlSession);
+            }
+        }
+    }
 }
