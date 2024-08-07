@@ -12,7 +12,6 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 // 使用了mybatis，则尽量避免导入 java.sql 包
@@ -227,5 +226,27 @@ public class MyBatisTest {
                 MyBatisUtils.closeSession(sqlSession);
             }
         }
+    }
+
+    @Test
+    public void dynamicTest() throws Exception {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = MyBatisUtils.openSession();
+            Map<String, Number> params = new HashMap<>();
+            params.put("categoryId", 44);
+            params.put("currentPrice", 100);
+            List<Goods> goodsList = sqlSession.selectList("goods.dynamic", params);
+            for (Goods item : goodsList) {
+                System.out.println(item.getTitle());
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (sqlSession != null) {
+                MyBatisUtils.closeSession(sqlSession);
+            }
+        }
+
     }
 }
